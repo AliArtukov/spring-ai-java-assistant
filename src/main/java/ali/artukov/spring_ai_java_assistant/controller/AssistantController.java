@@ -16,7 +16,7 @@ public class AssistantController {
         this.assistantService = assistantService;
     }
 
-    @GetMapping
+    @GetMapping(produces = "text/markdown")
     public String assistant(@RequestParam(value = "question", defaultValue = "What is Java?") String question) {
         return assistantService.giveResponse(question);
     }

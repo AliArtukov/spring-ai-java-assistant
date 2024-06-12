@@ -23,6 +23,7 @@ public class AssistantService {
         log.info("USER: {}", question);
 
         String document = String.join("\n", findSimilarDocuments(question));
+        log.info("DOCUMENT: {}", document);
         String answer = chatClient
                 .prompt()
                 .system(systemSpec -> systemSpec.param("document", document))
