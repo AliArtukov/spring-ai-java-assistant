@@ -31,7 +31,7 @@ Full content of `pom.xml` file:
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.0</version>
+        <version>3.3.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>ali.artukov</groupId>
@@ -42,8 +42,6 @@ Full content of `pom.xml` file:
     <properties>
         <java.version>21</java.version>
         <spring-ai.version>1.0.0-M1</spring-ai.version>
-        <spring-shell.version>3.3.0</spring-shell.version>
-        <vaadin.version>24.4.1</vaadin.version>
     </properties>
     <dependencies>
         <dependency>
@@ -83,14 +81,6 @@ Full content of `pom.xml` file:
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-pdf-document-reader</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.shell</groupId>
-            <artifactId>spring-shell-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
     </dependencies>
     <dependencyManagement>
         <dependencies>
@@ -98,13 +88,6 @@ Full content of `pom.xml` file:
                 <groupId>org.springframework.ai</groupId>
                 <artifactId>spring-ai-bom</artifactId>
                 <version>${spring-ai.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.shell</groupId>
-                <artifactId>spring-shell-dependencies</artifactId>
-                <version>${spring-shell.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -156,38 +139,28 @@ mvn spring-boot:run
 
 # Result
 
-I called GET method [/assistant](http://localhost:8080/assistant) without params and received the following response:
-
-```markdown
-Java is a general-purpose, concurrent, class-based, object-oriented programming language. It is designed to be simple
-enough for many programmers to achieve fluency. Java is related to C and C++ but is organized differently, omitting some
-features of these languages and incorporating ideas from other languages. It is intended for production use rather than
-research, avoiding untested features.
-
-Java is strongly and statically typed, with clear distinctions between compile-time errors and run-time errors. It is a
-relatively high-level language that abstracts away details of machine representation and includes automatic storage
-management, typically using a garbage collector. Java does not include unsafe constructs like unchecked array accesses,
-ensuring programs behave in a specified manner.
-
-Java programs are normally compiled to a machine-independent bytecode, which is executed by the Java Virtual Machine (
-JVM).
-```
-
 I called GET
-method [/assistant?question=When published Java 22? Write list of Java 22 writers](http://localhost:8080/assistant?question=When%20published%20Java%2022%3F%20Write%20list%20of%20Java%2022%20writers)
+method [/api/simple-assistant?question=When published Java 22?](http://localhost:8080/api/simple-assistant?question=When%20published%20Java%2022%3F)
 and received the
 following response:
 
-```markdown
-Java SE 22 Edition was published on March 2024.
+```json
+{
+  "question": "When published Java 22?",
+  "topK": 3,
+  "answer": "Java SE 22 is scheduled to be released in March 2024."
+}
+```
 
-The writers of the Java SE 22 Edition are:
+I called GET
+method [/api/java-assistant?question=When published Java 22?](http://localhost:8080/api/java-assistant?question=When%20published%20Java%2022%3F)
+and received the
+following response:
 
-1. James Gosling
-2. Bill Joy
-3. Guy Steele
-4. Gilad Bracha
-5. Alex Buckley
-6. Daniel Smith
-7. Gavin Bierman
+```json
+{
+  "question": "When published Java 22?",
+  "topK": 3,
+  "answer": "Java SE 22 was published in March 2024."
+}
 ```

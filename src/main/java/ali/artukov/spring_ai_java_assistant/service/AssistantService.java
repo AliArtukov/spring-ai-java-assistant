@@ -1,5 +1,6 @@
 package ali.artukov.spring_ai_java_assistant.service;
 
+import ali.artukov.spring_ai_java_assistant.model.AssistantResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.ai.chat.client.ChatClient;
@@ -19,20 +20,18 @@ public class AssistantService {
     private final ChatClient chatClient;
     private final VectorStore vectorStore;
 
-    public String giveResponse(String question) {
-        log.info("USER: {}", question);
-
-        String document = String.join("\n", findSimilarDocuments(question));
-        log.info("DOCUMENT: {}", document);
+    public AssistantResponse giveResponse(String question, boolean findSimilarDocuments) {
+        String similarDocuments = findSimilarDocuments ? String.join("\n", findSimilarDocuments(question)) : "";
         String answer = chatClient
                 .prompt()
-                .system(systemSpec -> systemSpec.param("document", document))
+                .system(systemSpec -> systemSpec.param("document", similarDocuments))
                 .user(question)
                 .call()
                 .content();
 
-        log.info("JAVA ASSISTANT: {}", answer);
-        return answer;
+        AssistantResponse assistantResponse = new AssistantResponse(question, 3, answer);
+        log.info("JAVA ASSISTANT: {}", assistantResponse.answer());
+        return assistantResponse;
     }
 
     private List<String> findSimilarDocuments(String message) {
